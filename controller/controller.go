@@ -1,10 +1,18 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/iagoMAF/API_JOHARI/models"
+)
 
 func ExibeTodosAtletas(c *gin.Context) {
+	c.JSON(200, models.Atletas)
+}
+
+func Saudacao(c *gin.Context) {
+	nome := c.Params.ByName("nome")
+
 	c.JSON(200, gin.H{
-		"id":   "1",
-		"nome": "Teste",
+		"API": "Bem vindo " + nome + ".",
 	})
 }
