@@ -2,8 +2,10 @@ package database
 
 import (
 	"log"
+	"os"
 
 	"github.com/iagoMAF/API_JOHARI/models"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -14,7 +16,16 @@ var (
 )
 
 func ConectaDataBase() {
-	stringConnection := "host=localhost user=root password=root dbname=root port=5434 sslmode=disable"
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	}
+
+	urlDB := os.Getenv("DATABASE_URL")
+	if urlDB == "" {
+		log.Fatalf("Erro ao carregar o arquivo DATABASE_URL .env: %v", err)
+	}
+
+	stringConnection := urlDB
 	DB, err = gorm.Open(postgres.Open(stringConnection))
 
 	if err != nil {

@@ -1,12 +1,24 @@
 package routes
 
 import (
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/iagoMAF/API_JOHARI/controller"
+	"github.com/joho/godotenv"
 )
 
 func HandleRequest() {
 	r := gin.Default()
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
 	// rotas de atleta
 	r.GET("/atletas", controller.ExibeTodosAtletas)
@@ -27,6 +39,5 @@ func HandleRequest() {
 	r.PATCH("/equipe/:id", controller.AtualizaEquipe)
 	r.DELETE("/equipe/:id", controller.DeletaEquipePorID)
 
-	// criar um .env para informar a porta em que a aplicação vai rodar
-	r.Run(":8080")
+	r.Run(":" + port)
 }

@@ -62,7 +62,6 @@ func AtualizaAtleta(c *gin.Context) {
 		return
 	}
 
-	// Atualiza os campos do atleta
 	if err := database.DB.Model(&atleta).Updates(atleta).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Falha ao atualizar o atleta"})
 		return
