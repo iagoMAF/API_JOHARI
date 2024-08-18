@@ -50,5 +50,9 @@ func HandleRequest() {
 	r.GET("/pergunta", controller.ExibeTodasAsPerguntas)
 	r.GET("/pergunta/:id", controller.ExibePerguntaPorID)
 
+	// rotas de respostas
+	r.GET("/resposta", controller.ExibeTodasAsRespostas)
+	r.GET("/resposta/:id", controller.ExibeRespostaPorID)
+
 	r.Run(":" + port)
 }
