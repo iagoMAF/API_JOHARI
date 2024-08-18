@@ -48,6 +48,8 @@ func HandleRequest() {
 
 	// rotas de perguntas
 	r.GET("/pergunta", controller.ExibeTodasAsPerguntas)
+	r.GET("/perguntaComRespostas/:id", controller.ExibePerguntaComRespostas)
+	r.GET("/perguntasComRespostas", controller.ExibePerguntasComRespostas)
 	r.GET("/pergunta/:id", controller.ExibePerguntaPorID)
 
 	// rotas de respostas

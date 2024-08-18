@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,4 +29,40 @@ func ExibePerguntaPorID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, pergunta)
+}
+
+func ExibePerguntaComRespostas(c *gin.Context) {
+	var pergunta models.Pergunta
+	id := c.Param("id") // Obter o ID da URL
+
+	result := database.DB.Preload("Respostas").First(&pergunta, id)
+	if result.Error != nil {
+
+		fmt.Printf("Erro ao buscar pergunta com ID %s: %v\n", id, result.Error)
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":  "Pergunta não encontrada",
+			"status": 404,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, pergunta)
+}
+
+func ExibePerguntasComRespostas(c *gin.Context) {
+	var perguntas []models.Pergunta
+
+	// Buscar todas as perguntas com suas respostas associadas
+	result := database.DB.Preload("Respostas").Find(&perguntas)
+	if result.Error != nil {
+		// Adicione o log do erro para debugging
+		fmt.Printf("Erro ao buscar todas as perguntas: %v\n", result.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":  "Erro ao buscar perguntas",
+			"status": 500,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, perguntas)
 }
