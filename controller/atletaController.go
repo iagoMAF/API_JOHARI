@@ -31,9 +31,9 @@ func CriaAtleta(c *gin.Context) {
 
 func ExibeAtletaPorID(c *gin.Context) {
 	var atleta models.Atleta
-	cpf := c.Params.ByName("cpf")
+	cpf := c.Param("cpf")
 
-	result := database.DB.Where("cpf = ?", cpf).First(&atleta)
+	result := database.DB.Preload("Lider").Where("cpf = ?", cpf).First(&atleta)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error":  "Atleta não encontrado",
