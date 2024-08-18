@@ -56,5 +56,9 @@ func HandleRequest() {
 	r.GET("/resposta", controller.ExibeTodasAsRespostas)
 	r.GET("/resposta/:id", controller.ExibeRespostaPorID)
 
+	// rotas de resultado
+	r.POST("/resultado", controller.CriaResultado)
+	r.GET("/resultado/:cpf", controller.ExibeResultadosPorCPF)
+
 	r.Run(":" + port)
 }

@@ -34,5 +34,6 @@ func ConectaDataBase() {
 
 	DB.AutoMigrate(&models.Atleta{}, &models.Admin{},
 		&models.Equipe{}, &models.Lider{},
-		&models.Pergunta{}, &models.Resposta{})
+		&models.Pergunta{}, &models.Resposta{},
+		&models.Resultado{})
 }
