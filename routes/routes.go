@@ -46,5 +46,9 @@ func HandleRequest() {
 	r.PATCH("/lider/:cpf", controller.AtualizaLider)
 	r.DELETE("/lider/:cpf", controller.DeletaLider)
 
+	// rotas de perguntas
+	r.GET("/pergunta", controller.ExibeTodasAsPerguntas)
+	r.GET("/pergunta/:id", controller.ExibePerguntaPorID)
+
 	r.Run(":" + port)
 }

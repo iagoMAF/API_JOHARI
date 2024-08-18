@@ -32,5 +32,7 @@ func ConectaDataBase() {
 		log.Panic("Erro ao conectar com o banco de dados.")
 	}
 
-	DB.AutoMigrate(&models.Atleta{}, &models.Admin{}, &models.Equipe{}, &models.Lider{})
+	DB.AutoMigrate(&models.Atleta{}, &models.Admin{},
+		&models.Equipe{}, &models.Lider{},
+		&models.Pergunta{})
 }
