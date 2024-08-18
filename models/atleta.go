@@ -12,8 +12,9 @@ type Atleta struct {
 	Idade     int     `json:"indade"`
 	Ativo     int     `json:"ativo"`
 	CPF_Lider *string `json:"cpf_lider" gorm:"index"`
-	ID_Equipe int     `json:"id_equipe"`
+	ID_Equipe *uint   `json:"id_equipe" gorm:"index"`
 	Lider     Lider   `gorm:"foreignKey:CPF_Lider;references:CPF"`
+	Equipe    Equipe  `gorm:"foreignKey:ID_Equipe;references:ID"`
 }
 
 var Atletas []Atleta

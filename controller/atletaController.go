@@ -33,7 +33,8 @@ func ExibeAtletaPorID(c *gin.Context) {
 	var atleta models.Atleta
 	cpf := c.Param("cpf")
 
-	result := database.DB.Preload("Lider").Where("cpf = ?", cpf).First(&atleta)
+	// Busca o atleta e pré-carrega as informações do lider e da equipe associada
+	result := database.DB.Preload("Lider").Preload("Equipe").Where("cpf = ?", cpf).First(&atleta)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error":  "Atleta não encontrado",
