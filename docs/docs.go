@@ -598,6 +598,208 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/pergunta/{id}": {
+            "get": {
+                "description": "Busca uma pergunta pelo ID informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Perguntas"
+                ],
+                "summary": "Exibe uma pergunta por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da pergunta",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pergunta"
+                        }
+                    },
+                    "404": {
+                        "description": "Pergunta não encontrada",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/pergunta/{id}/respostas": {
+            "get": {
+                "description": "Busca uma pergunta com todas as respostas associadas pelo ID informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Perguntas"
+                ],
+                "summary": "Exibe uma pergunta com suas respostas",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da pergunta",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pergunta"
+                        }
+                    },
+                    "404": {
+                        "description": "Pergunta não encontrada",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/perguntas": {
+            "get": {
+                "description": "Retorna uma lista de todas as perguntas cadastradas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Perguntas"
+                ],
+                "summary": "Exibe todas as perguntas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Pergunta"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/perguntas/respostas": {
+            "get": {
+                "description": "Busca todas as perguntas com suas respostas associadas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Perguntas"
+                ],
+                "summary": "Exibe todas as perguntas com suas respostas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Pergunta"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar perguntas",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/resposta/{id}": {
+            "get": {
+                "description": "Busca uma resposta pelo ID informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Respostas"
+                ],
+                "summary": "Exibe uma resposta por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da resposta",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Resposta"
+                        }
+                    },
+                    "404": {
+                        "description": "Resposta não encontrada",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/respostas": {
+            "get": {
+                "description": "Retorna uma lista de todas as respostas cadastradas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Respostas"
+                ],
+                "summary": "Exibe todas as respostas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Resposta"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -735,6 +937,45 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "description": "Data de atualização",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Pergunta": {
+            "description": "Representa uma pergunta com um conjunto de respostas.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID da pergunta",
+                    "type": "integer"
+                },
+                "pergunta": {
+                    "description": "Texto da pergunta",
+                    "type": "string"
+                },
+                "respostas": {
+                    "description": "Respostas associadas",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Resposta"
+                    }
+                }
+            }
+        },
+        "models.Resposta": {
+            "description": "Representa uma resposta associada a uma pergunta.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID da resposta",
+                    "type": "integer"
+                },
+                "pergunta_id": {
+                    "description": "ID da pergunta associada",
+                    "type": "integer"
+                },
+                "resposta": {
+                    "description": "Texto da resposta",
                     "type": "string"
                 }
             }

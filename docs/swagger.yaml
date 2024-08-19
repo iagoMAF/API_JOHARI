@@ -97,6 +97,34 @@ definitions:
         description: Data de atualização
         type: string
     type: object
+  models.Pergunta:
+    description: Representa uma pergunta com um conjunto de respostas.
+    properties:
+      id:
+        description: ID da pergunta
+        type: integer
+      pergunta:
+        description: Texto da pergunta
+        type: string
+      respostas:
+        description: Respostas associadas
+        items:
+          $ref: '#/definitions/models.Resposta'
+        type: array
+    type: object
+  models.Resposta:
+    description: Representa uma resposta associada a uma pergunta.
+    properties:
+      id:
+        description: ID da resposta
+        type: integer
+      pergunta_id:
+        description: ID da pergunta associada
+        type: integer
+      resposta:
+        description: Texto da resposta
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -491,4 +519,138 @@ paths:
       summary: Exibe todos os líderes
       tags:
       - Líderes
+  /pergunta/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Busca uma pergunta pelo ID informado
+      parameters:
+      - description: ID da pergunta
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pergunta'
+        "404":
+          description: Pergunta não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe uma pergunta por ID
+      tags:
+      - Perguntas
+  /pergunta/{id}/respostas:
+    get:
+      consumes:
+      - application/json
+      description: Busca uma pergunta com todas as respostas associadas pelo ID informado
+      parameters:
+      - description: ID da pergunta
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pergunta'
+        "404":
+          description: Pergunta não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe uma pergunta com suas respostas
+      tags:
+      - Perguntas
+  /perguntas:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de todas as perguntas cadastradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pergunta'
+            type: array
+      summary: Exibe todas as perguntas
+      tags:
+      - Perguntas
+  /perguntas/respostas:
+    get:
+      consumes:
+      - application/json
+      description: Busca todas as perguntas com suas respostas associadas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pergunta'
+            type: array
+        "500":
+          description: Erro ao buscar perguntas
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe todas as perguntas com suas respostas
+      tags:
+      - Perguntas
+  /resposta/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Busca uma resposta pelo ID informado
+      parameters:
+      - description: ID da resposta
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Resposta'
+        "404":
+          description: Resposta não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe uma resposta por ID
+      tags:
+      - Respostas
+  /respostas:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de todas as respostas cadastradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Resposta'
+            type: array
+      summary: Exibe todas as respostas
+      tags:
+      - Respostas
 swagger: "2.0"

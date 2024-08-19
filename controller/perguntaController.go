@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,60 +8,80 @@ import (
 	"github.com/iagoMAF/API_JOHARI/models"
 )
 
+// ExibeTodasAsPerguntas godoc
+// @Summary Exibe todas as perguntas
+// @Description Retorna uma lista de todas as perguntas cadastradas
+// @Tags Perguntas
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.Pergunta
+// @Router /perguntas [get]
 func ExibeTodasAsPerguntas(c *gin.Context) {
 	var perguntas []models.Pergunta
-	database.DB.Find(&perguntas)
+	if err := database.DB.Find(&perguntas).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar perguntas"})
+		return
+	}
 	c.JSON(http.StatusOK, perguntas)
 }
 
+// ExibePerguntaPorID godoc
+// @Summary Exibe uma pergunta por ID
+// @Description Busca uma pergunta pelo ID informado
+// @Tags Perguntas
+// @Accept  json
+// @Produce  json
+// @Param id path int true "ID da pergunta"
+// @Success 200 {object} models.Pergunta
+// @Failure 404 {object} map[string]interface{} "Pergunta não encontrada"
+// @Router /pergunta/{id} [get]
 func ExibePerguntaPorID(c *gin.Context) {
 	var pergunta models.Pergunta
-	id := c.Params.ByName("id")
+	id := c.Param("id")
 
-	result := database.DB.Where("id = ?", id).First(&pergunta)
-	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error":  "Pergunta não encontrada",
-			"status": 404,
-		})
+	if err := database.DB.Where("id = ?", id).First(&pergunta).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Pergunta não encontrada"})
 		return
 	}
-
 	c.JSON(http.StatusOK, pergunta)
 }
 
+// ExibePerguntaComRespostas godoc
+// @Summary Exibe uma pergunta com suas respostas
+// @Description Busca uma pergunta com todas as respostas associadas pelo ID informado
+// @Tags Perguntas
+// @Accept  json
+// @Produce  json
+// @Param id path int true "ID da pergunta"
+// @Success 200 {object} models.Pergunta
+// @Failure 404 {object} map[string]interface{} "Pergunta não encontrada"
+// @Router /pergunta/{id}/respostas [get]
 func ExibePerguntaComRespostas(c *gin.Context) {
 	var pergunta models.Pergunta
-	id := c.Param("id") // Obter o ID da URL
+	id := c.Param("id")
 
-	result := database.DB.Preload("Respostas").First(&pergunta, id)
-	if result.Error != nil {
-
-		fmt.Printf("Erro ao buscar pergunta com ID %s: %v\n", id, result.Error)
-		c.JSON(http.StatusNotFound, gin.H{
-			"error":  "Pergunta não encontrada",
-			"status": 404,
-		})
+	if err := database.DB.Preload("Respostas").First(&pergunta, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Pergunta não encontrada"})
 		return
 	}
-
 	c.JSON(http.StatusOK, pergunta)
 }
 
+// ExibePerguntasComRespostas godoc
+// @Summary Exibe todas as perguntas com suas respostas
+// @Description Busca todas as perguntas com suas respostas associadas
+// @Tags Perguntas
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.Pergunta
+// @Failure 500 {object} map[string]interface{} "Erro ao buscar perguntas"
+// @Router /perguntas/respostas [get]
 func ExibePerguntasComRespostas(c *gin.Context) {
 	var perguntas []models.Pergunta
 
-	// Buscar todas as perguntas com suas respostas associadas
-	result := database.DB.Preload("Respostas").Find(&perguntas)
-	if result.Error != nil {
-		// Adicione o log do erro para debugging
-		fmt.Printf("Erro ao buscar todas as perguntas: %v\n", result.Error)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":  "Erro ao buscar perguntas",
-			"status": 500,
-		})
+	if err := database.DB.Preload("Respostas").Find(&perguntas).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar perguntas"})
 		return
 	}
-
 	c.JSON(http.StatusOK, perguntas)
 }
