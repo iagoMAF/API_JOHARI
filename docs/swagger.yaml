@@ -1,4 +1,12 @@
 definitions:
+  models.Admin:
+    description: Representa um administrador do sistema
+    properties:
+      login:
+        type: string
+      senha:
+        type: string
+    type: object
   models.Atleta:
     description: Representa um atleta com informações básicas.
     properties:
@@ -128,6 +136,137 @@ definitions:
 info:
   contact: {}
 paths:
+  /admin:
+    post:
+      consumes:
+      - application/json
+      description: Cadastra um novo administrador no sistema
+      parameters:
+      - description: Dados do administrador
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.Admin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Admin'
+        "400":
+          description: Falha ao cadastrar administrador
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao salvar administrador no banco de dados
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Cria um novo administrador
+      tags:
+      - Administradores
+  /admin/{login}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um administrador do sistema pelo login informado
+      parameters:
+      - description: Login do administrador
+        in: path
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Administrador deletado com sucesso
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Administrador não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao deletar o administrador
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Deleta um administrador por login
+      tags:
+      - Administradores
+    get:
+      consumes:
+      - application/json
+      description: Busca um administrador pelo login informado
+      parameters:
+      - description: Login do administrador
+        in: path
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Admin'
+        "404":
+          description: Administrador não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe um administrador por login
+      tags:
+      - Administradores
+  /admin/{login}/senha:
+    patch:
+      consumes:
+      - application/json
+      description: Atualiza a senha de um administrador existente pelo login
+      parameters:
+      - description: Login do administrador
+        in: path
+        name: login
+        required: true
+        type: string
+      - description: Nova senha
+        in: body
+        name: senha
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Admin'
+        "400":
+          description: Dados inválidos para atualização
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Administrador não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao atualizar a senha do administrador
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Atualiza a senha de um administrador
+      tags:
+      - Administradores
   /atleta:
     post:
       consumes:

@@ -4,6 +4,200 @@
         "contact": {}
     },
     "paths": {
+        "/admin": {
+            "post": {
+                "description": "Cadastra um novo administrador no sistema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Cria um novo administrador",
+                "parameters": [
+                    {
+                        "description": "Dados do administrador",
+                        "name": "admin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Admin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Admin"
+                        }
+                    },
+                    "400": {
+                        "description": "Falha ao cadastrar administrador",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao salvar administrador no banco de dados",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/{login}": {
+            "get": {
+                "description": "Busca um administrador pelo login informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Exibe um administrador por login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Login do administrador",
+                        "name": "login",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Admin"
+                        }
+                    },
+                    "404": {
+                        "description": "Administrador não encontrado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um administrador do sistema pelo login informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Deleta um administrador por login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Login do administrador",
+                        "name": "login",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Administrador deletado com sucesso",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Administrador não encontrado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao deletar o administrador",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/{login}/senha": {
+            "patch": {
+                "description": "Atualiza a senha de um administrador existente pelo login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Atualiza a senha de um administrador",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Login do administrador",
+                        "name": "login",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Nova senha",
+                        "name": "senha",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Admin"
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos para atualização",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Administrador não encontrado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar a senha do administrador",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/atleta": {
             "post": {
                 "description": "Cadastra um novo atleta no sistema",
@@ -792,6 +986,18 @@
         }
     },
     "definitions": {
+        "models.Admin": {
+            "description": "Representa um administrador do sistema",
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Atleta": {
             "description": "Representa um atleta com informações básicas.",
             "type": "object",
