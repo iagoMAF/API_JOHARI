@@ -7,6 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iagoMAF/API_JOHARI/controller"
 	"github.com/joho/godotenv"
+
+	_ "github.com/iagoMAF/API_JOHARI/docs"
+	swaggerFiles "github.com/swaggo/files"     // Importa os arquivos Swagger
+	ginSwagger "github.com/swaggo/gin-swagger" // Importa o middleware gin-swagger
 )
 
 func HandleRequest() {
@@ -19,6 +23,8 @@ func HandleRequest() {
 	if port == "" {
 		port = "8080"
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// rotas de atleta
 	r.GET("/atletas", controller.ExibeTodosAtletas)

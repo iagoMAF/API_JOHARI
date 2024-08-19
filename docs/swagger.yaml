@@ -1,0 +1,494 @@
+definitions:
+  models.Atleta:
+    description: Representa um atleta com informações básicas.
+    properties:
+      ativo:
+        description: Status ativo do atleta
+        type: integer
+      cpf:
+        description: CPF do atleta
+        type: string
+      cpf_lider:
+        description: CPF do líder associado
+        type: string
+      createdAt:
+        description: Data de criação
+        type: string
+      deletedAt:
+        description: Data de exclusão (opcional)
+        type: string
+      email:
+        description: Email do atleta
+        type: string
+      equipe:
+        allOf:
+        - $ref: '#/definitions/models.Equipe'
+        description: Relacionamento com o modelo Equipe
+      funcao:
+        description: Função do atleta
+        type: string
+      id:
+        description: ID do atleta
+        type: integer
+      id_equipe:
+        description: ID da equipe associada
+        type: integer
+      idade:
+        description: Idade do atleta
+        type: integer
+      lider:
+        allOf:
+        - $ref: '#/definitions/models.Lider'
+        description: Relacionamento com o modelo Lider
+      nome:
+        description: Nome do atleta
+        type: string
+      senha:
+        description: Senha do atleta
+        type: string
+      updatedAt:
+        description: Data de atualização
+        type: string
+    type: object
+  models.Equipe:
+    description: Representa uma equipe com informações básicas.
+    properties:
+      ativo:
+        description: Status ativo da equipe
+        type: integer
+      createdAt:
+        description: Data de criação
+        type: string
+      deletedAt:
+        description: Data de exclusão (opcional)
+        type: string
+      id:
+        description: ID da equipe
+        type: integer
+      nome:
+        description: Nome da equipe
+        type: string
+      updatedAt:
+        description: Data de atualização
+        type: string
+    type: object
+  models.Lider:
+    description: Representa um líder com informações básicas.
+    properties:
+      cpf:
+        description: CPF do líder
+        type: string
+      createdAt:
+        description: Data de criação
+        type: string
+      deletedAt:
+        description: Data de exclusão (opcional)
+        type: string
+      email:
+        description: Email do líder
+        type: string
+      nome:
+        description: Nome do líder
+        type: string
+      senha:
+        description: Senha do líder
+        type: string
+      updatedAt:
+        description: Data de atualização
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /atleta:
+    post:
+      consumes:
+      - application/json
+      description: Cadastra um novo atleta no sistema
+      parameters:
+      - description: Dados do atleta
+        in: body
+        name: atleta
+        required: true
+        schema:
+          $ref: '#/definitions/models.Atleta'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Atleta'
+        "400":
+          description: Falha ao cadastrar atleta
+          schema:
+            $ref: '#/definitions/models.Atleta'
+      summary: Cria um novo atleta
+      tags:
+      - Atletas
+  /atleta/{cpf}:
+    get:
+      consumes:
+      - application/json
+      description: Busca um atleta pelo CPF informado
+      parameters:
+      - description: CPF do atleta
+        in: path
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Atleta'
+        "404":
+          description: Atleta não encontrado
+          schema:
+            $ref: '#/definitions/models.Atleta'
+      summary: Exibe um atleta por CPF
+      tags:
+      - Atletas
+    patch:
+      consumes:
+      - application/json
+      description: Atualiza os dados de um atleta existente pelo CPF
+      parameters:
+      - description: CPF do atleta
+        in: path
+        name: cpf
+        required: true
+        type: string
+      - description: Dados atualizados do atleta
+        in: body
+        name: atleta
+        required: true
+        schema:
+          $ref: '#/definitions/models.Atleta'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Atleta'
+        "400":
+          description: Dados inválidos para atualização
+          schema:
+            $ref: '#/definitions/models.Atleta'
+        "404":
+          description: Atleta não encontrado
+          schema:
+            $ref: '#/definitions/models.Atleta'
+      summary: Atualiza um atleta
+      tags:
+      - Atletas
+  /atletas:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de todos os atletas cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Atleta'
+            type: array
+      summary: Exibe todos os atletas
+      tags:
+      - Atletas
+  /equipe:
+    post:
+      consumes:
+      - application/json
+      description: Cadastra uma nova equipe no sistema
+      parameters:
+      - description: Dados da equipe
+        in: body
+        name: equipe
+        required: true
+        schema:
+          $ref: '#/definitions/models.Equipe'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Equipe'
+        "400":
+          description: Falha ao cadastrar equipe
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao salvar equipe no banco de dados
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Cria uma nova equipe
+      tags:
+      - Equipes
+  /equipe/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove uma equipe do sistema pelo ID informado
+      parameters:
+      - description: ID da equipe
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Equipe deletada com sucesso
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Equipe não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao deletar a equipe
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Deleta uma equipe por ID
+      tags:
+      - Equipes
+    get:
+      consumes:
+      - application/json
+      description: Busca uma equipe pelo ID informado
+      parameters:
+      - description: ID da equipe
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Equipe'
+        "404":
+          description: Equipe não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe uma equipe por ID
+      tags:
+      - Equipes
+    patch:
+      consumes:
+      - application/json
+      description: Atualiza os dados de uma equipe existente pelo ID
+      parameters:
+      - description: ID da equipe
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados da equipe
+        in: body
+        name: equipe
+        required: true
+        schema:
+          $ref: '#/definitions/models.Equipe'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Equipe'
+        "400":
+          description: Dados inválidos para atualização
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Equipe não encontrada
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao atualizar a equipe
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Atualiza uma equipe
+      tags:
+      - Equipes
+  /equipes:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de todas as equipes cadastradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Equipe'
+            type: array
+      summary: Exibe todas as equipes
+      tags:
+      - Equipes
+  /lider:
+    post:
+      consumes:
+      - application/json
+      description: Cadastra um novo líder no sistema
+      parameters:
+      - description: Dados do líder
+        in: body
+        name: lider
+        required: true
+        schema:
+          $ref: '#/definitions/models.Lider'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Lider'
+        "400":
+          description: Falha ao cadastrar líder
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Cria um novo líder
+      tags:
+      - Líderes
+  /lider/{cpf}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove um líder do sistema pelo CPF informado
+      parameters:
+      - description: CPF do líder
+        in: path
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Líder deletado com sucesso
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Líder não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao deletar o líder
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Deleta um líder por CPF
+      tags:
+      - Líderes
+    get:
+      consumes:
+      - application/json
+      description: Busca um líder pelo CPF informado
+      parameters:
+      - description: CPF do líder
+        in: path
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Lider'
+        "404":
+          description: Líder não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Exibe um líder por CPF
+      tags:
+      - Líderes
+    patch:
+      consumes:
+      - application/json
+      description: Atualiza os dados de um líder existente pelo CPF
+      parameters:
+      - description: CPF do líder
+        in: path
+        name: cpf
+        required: true
+        type: string
+      - description: Dados atualizados do líder
+        in: body
+        name: lider
+        required: true
+        schema:
+          $ref: '#/definitions/models.Lider'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Lider'
+        "400":
+          description: Dados inválidos para atualização
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Líder não encontrado
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Falha ao atualizar o líder
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Atualiza um líder
+      tags:
+      - Líderes
+  /lideres:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de todos os líderes cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Lider'
+            type: array
+      summary: Exibe todos os líderes
+      tags:
+      - Líderes
+swagger: "2.0"
