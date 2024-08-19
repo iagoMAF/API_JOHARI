@@ -9,6 +9,17 @@ import (
 	"github.com/iagoMAF/API_JOHARI/models"
 )
 
+// CriaResultado godoc
+// @Summary Cria um novo resultado
+// @Description Cadastra um novo resultado no sistema
+// @Tags Resultados
+// @Accept  json
+// @Produce  json
+// @Param resultado body models.Resultado true "Dados do resultado"
+// @Success 200 {object} models.Resultado
+// @Failure 400 {object} map[string]interface{} "Falha ao cadastrar resultado"
+// @Failure 500 {object} map[string]interface{} "Falha ao criar resultado"
+// @Router /resultado [post]
 func CriaResultado(c *gin.Context) {
 	var resultado models.Resultado
 
@@ -35,6 +46,16 @@ func CriaResultado(c *gin.Context) {
 	c.JSON(http.StatusOK, resultado)
 }
 
+// ExibeResultadosPorCPF godoc
+// @Summary Exibe resultados por CPF
+// @Description Busca todos os resultados associados ao CPF informado
+// @Tags Resultados
+// @Accept  json
+// @Produce  json
+// @Param cpf path string true "CPF do atleta"
+// @Success 200 {array} models.Resultado
+// @Failure 404 {object} map[string]interface{} "Resultados não encontrados"
+// @Router /resultados/{cpf} [get]
 func ExibeResultadosPorCPF(c *gin.Context) {
 	var resultados []models.Resultado
 	cpf := c.Param("cpf")

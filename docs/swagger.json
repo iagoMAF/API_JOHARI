@@ -983,6 +983,96 @@
                     }
                 }
             }
+        },
+        "/resultado": {
+            "post": {
+                "description": "Cadastra um novo resultado no sistema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Resultados"
+                ],
+                "summary": "Cria um novo resultado",
+                "parameters": [
+                    {
+                        "description": "Dados do resultado",
+                        "name": "resultado",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Resultado"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Resultado"
+                        }
+                    },
+                    "400": {
+                        "description": "Falha ao cadastrar resultado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao criar resultado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/resultados/{cpf}": {
+            "get": {
+                "description": "Busca todos os resultados associados ao CPF informado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Resultados"
+                ],
+                "summary": "Exibe resultados por CPF",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CPF do atleta",
+                        "name": "cpf",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Resultado"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resultados não encontrados",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1171,6 +1261,27 @@
                 },
                 "resposta": {
                     "description": "Texto da resposta",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Resultado": {
+            "description": "Resultado representa o modelo de um resultado de desempenho com informações do atleta e os dados de resultado",
+            "type": "object",
+            "properties": {
+                "cpf": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "eixo_x": {
+                    "type": "string"
+                },
+                "eixo_y": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }
