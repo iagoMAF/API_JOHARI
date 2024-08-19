@@ -38,7 +38,7 @@ func CriaAtleta(c *gin.Context) {
 	if err := c.ShouldBindJSON(&atleta); err != nil {
 		c.JSON(http.StatusBadRequest, models.Atleta{
 			Nome:  "Erro",
-			Email: err.Error(), // Exemplo de mensagem de erro
+			Email: err.Error(),
 		})
 		return
 	}
@@ -65,7 +65,7 @@ func ExibeAtletaPorID(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.Atleta{
 			Nome:  "Erro",
-			Email: "Atleta não encontrado", // Exemplo de mensagem de erro
+			Email: "Atleta não encontrado",
 		})
 		return
 	}
@@ -92,7 +92,7 @@ func AtualizaAtleta(c *gin.Context) {
 	if err := database.DB.Where("cpf = ?", cpf).First(&atleta).Error; err != nil {
 		c.JSON(http.StatusNotFound, models.Atleta{
 			Nome:  "Erro",
-			Email: "Atleta não encontrado", // Exemplo de mensagem de erro
+			Email: "Atleta não encontrado",
 		})
 		return
 	}
@@ -100,7 +100,7 @@ func AtualizaAtleta(c *gin.Context) {
 	if err := c.ShouldBindJSON(&atleta); err != nil {
 		c.JSON(http.StatusBadRequest, models.Atleta{
 			Nome:  "Erro",
-			Email: "Dados inválidos para atualização", // Exemplo de mensagem de erro
+			Email: "Dados inválidos para atualização",
 		})
 		return
 	}
@@ -108,7 +108,7 @@ func AtualizaAtleta(c *gin.Context) {
 	if err := database.DB.Model(&atleta).Updates(atleta).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, models.Atleta{
 			Nome:  "Erro",
-			Email: "Falha ao atualizar o atleta", // Exemplo de mensagem de erro
+			Email: "Falha ao atualizar o atleta",
 		})
 		return
 	}
