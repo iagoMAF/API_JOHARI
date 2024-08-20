@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iagoMAF/API_JOHARI/controller"
 	"github.com/iagoMAF/API_JOHARI/middleware"
+
 	"github.com/joho/godotenv"
 
 	_ "github.com/iagoMAF/API_JOHARI/docs"

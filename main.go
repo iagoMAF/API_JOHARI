@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	// gin.SetMode(gin.ReleaseMode)
 	database.ConectaDataBase()
 	routes.HandleRequest()
 }

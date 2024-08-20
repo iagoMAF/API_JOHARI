@@ -8,6 +8,12 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		if c.FullPath() == "/swagger/*any" {
+			c.Next()
+			return
+		}
+
 		token := c.GetHeader("Authorization")
 
 		if token != "8h9pBq2rRs1cT4dWzF5vH0mK" {
@@ -21,3 +27,5 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+//8h9pBq2rRs1cT4dWzF5vH0mK
