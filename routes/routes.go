@@ -35,6 +35,8 @@ func HandleRequest() {
 	r.GET("/atleta/:cpf", controller.ExibeAtletaPorID)
 	r.PATCH("/atleta/:cpf", controller.AtualizaAtleta)
 	r.POST("/atleta", controller.CriaAtleta)
+	r.GET("/atletas/lider/:cpf_lider", controller.ExibeAtletasPorLider)
+	r.GET("/atletas/equipe/:id_equipe", controller.ExibeAtletasPorEquipe)
 
 	// rotas de admin
 	r.POST("/admin", controller.CriaAdmin)

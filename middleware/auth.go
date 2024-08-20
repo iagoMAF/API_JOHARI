@@ -27,5 +27,3 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-//8h9pBq2rRs1cT4dWzF5vH0mK

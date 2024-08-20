@@ -18,7 +18,7 @@ import (
 // @Router /atletas [get]
 func ExibeTodosAtletas(c *gin.Context) {
 	var atletas []models.Atleta
-	database.DB.Find(&atletas)
+	database.DB.Preload("Lider").Preload("Equipe").Find(&atletas)
 	c.JSON(http.StatusOK, atletas)
 }
 
@@ -114,4 +114,50 @@ func AtualizaAtleta(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, atleta)
+}
+
+// ExibeAtletasPorLider godoc
+// @Summary Exibe todos os atletas associados a um líder
+// @Description Retorna uma lista de atletas associados ao líder especificado pelo CPF
+// @Tags Atletas
+// @Accept  json
+// @Produce  json
+// @Param cpf_lider path string true "CPF do líder"
+// @Success 200 {array} models.Atleta
+// @Failure 404 {object} gin.H{"error": "Nenhum atleta encontrado para o líder informado"}
+// @Router /atletas/lider/{cpf_lider} [get]
+func ExibeAtletasPorLider(c *gin.Context) {
+	var atletas []models.Atleta
+	cpfLider := c.Param("cpf_lider")
+
+	result := database.DB.Preload("Lider").Preload("Equipe").Where("cpf_lider = ?", cpfLider).Find(&atletas)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Nenhum atleta encontrado para esse líder"})
+		return
+	}
+
+	c.JSON(http.StatusOK, atletas)
+}
+
+// ExibeAtletasPorEquipe godoc
+// @Summary Exibe todos os atletas associados a uma equipe
+// @Description Retorna uma lista de atletas associados à equipe especificada pelo ID
+// @Tags Atletas
+// @Accept  json
+// @Produce  json
+// @Param id_equipe path uint true "ID da equipe"
+// @Success 200 {array} models.Atleta
+// @Failure 404 {object} gin.H{"error": "Nenhum atleta encontrado para a equipe informada"}
+// @Router /atletas/equipe/{id_equipe} [get]
+func ExibeAtletasPorEquipe(c *gin.Context) {
+	var atletas []models.Atleta
+	idEquipe := c.Param("id_equipe")
+
+	result := database.DB.Preload("Lider").Preload("Equipe").Where("id_equipe = ?", idEquipe).Find(&atletas)
+	if result.Error != nil || len(atletas) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Nenhum atleta encontrado para essa equipe"})
+		return
+	}
+
+	c.JSON(http.StatusOK, atletas)
 }
