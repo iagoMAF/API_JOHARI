@@ -243,7 +243,10 @@ const docTemplate = `{
                     "400": {
                         "description": "Falha ao cadastrar atleta",
                         "schema": {
-                            "$ref": "#/definitions/models.Atleta"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -281,7 +284,10 @@ const docTemplate = `{
                     "404": {
                         "description": "Atleta não encontrado",
                         "schema": {
-                            "$ref": "#/definitions/models.Atleta"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -326,13 +332,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Dados inválidos para atualização",
                         "schema": {
-                            "$ref": "#/definitions/models.Atleta"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     },
                     "404": {
                         "description": "Atleta não encontrado",
                         "schema": {
-                            "$ref": "#/definitions/models.Atleta"
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -358,6 +370,94 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/models.Atleta"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atletas/equipe/{id_equipe}": {
+            "get": {
+                "description": "Retorna uma lista de atletas associados à equipe especificada pelo ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Atletas"
+                ],
+                "summary": "Exibe todos os atletas associados a uma equipe",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da equipe",
+                        "name": "id_equipe",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Atleta"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhum atleta encontrado para a equipe informada",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atletas/lider/{cpf_lider}": {
+            "get": {
+                "description": "Retorna uma lista de atletas associados ao líder especificado pelo CPF",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Atletas"
+                ],
+                "summary": "Exibe todos os atletas associados a um líder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "CPF do líder",
+                        "name": "cpf_lider",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Atleta"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhum atleta encontrado para o líder informado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
                             }
                         }
                     }

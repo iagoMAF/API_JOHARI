@@ -304,7 +304,9 @@ paths:
         "400":
           description: Falha ao cadastrar atleta
           schema:
-            $ref: '#/definitions/models.Atleta'
+            additionalProperties:
+              type: string
+            type: object
       summary: Cria um novo atleta
       tags:
       - Atletas
@@ -329,7 +331,9 @@ paths:
         "404":
           description: Atleta não encontrado
           schema:
-            $ref: '#/definitions/models.Atleta'
+            additionalProperties:
+              type: string
+            type: object
       summary: Exibe um atleta por CPF
       tags:
       - Atletas
@@ -359,11 +363,15 @@ paths:
         "400":
           description: Dados inválidos para atualização
           schema:
-            $ref: '#/definitions/models.Atleta'
+            additionalProperties:
+              type: string
+            type: object
         "404":
           description: Atleta não encontrado
           schema:
-            $ref: '#/definitions/models.Atleta'
+            additionalProperties:
+              type: string
+            type: object
       summary: Atualiza um atleta
       tags:
       - Atletas
@@ -382,6 +390,66 @@ paths:
               $ref: '#/definitions/models.Atleta'
             type: array
       summary: Exibe todos os atletas
+      tags:
+      - Atletas
+  /atletas/equipe/{id_equipe}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de atletas associados à equipe especificada pelo
+        ID
+      parameters:
+      - description: ID da equipe
+        in: path
+        name: id_equipe
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Atleta'
+            type: array
+        "404":
+          description: Nenhum atleta encontrado para a equipe informada
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Exibe todos os atletas associados a uma equipe
+      tags:
+      - Atletas
+  /atletas/lider/{cpf_lider}:
+    get:
+      consumes:
+      - application/json
+      description: Retorna uma lista de atletas associados ao líder especificado pelo
+        CPF
+      parameters:
+      - description: CPF do líder
+        in: path
+        name: cpf_lider
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Atleta'
+            type: array
+        "404":
+          description: Nenhum atleta encontrado para o líder informado
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Exibe todos os atletas associados a um líder
       tags:
       - Atletas
   /equipe:

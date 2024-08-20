@@ -30,15 +30,15 @@ func ExibeTodosAtletas(c *gin.Context) {
 // @Produce  json
 // @Param atleta body models.Atleta true "Dados do atleta"
 // @Success 200 {object} models.Atleta
-// @Failure 400 {object} models.Atleta "Falha ao cadastrar atleta"
+// @Failure 400 {object} map[string]string "Falha ao cadastrar atleta"
 // @Router /atleta [post]
 func CriaAtleta(c *gin.Context) {
 	var atleta models.Atleta
 
 	if err := c.ShouldBindJSON(&atleta); err != nil {
-		c.JSON(http.StatusBadRequest, models.Atleta{
-			Nome:  "Erro",
-			Email: err.Error(),
+		c.JSON(http.StatusBadRequest, map[string]string{
+			"Nome":  "Erro",
+			"Email": err.Error(),
 		})
 		return
 	}
@@ -55,7 +55,7 @@ func CriaAtleta(c *gin.Context) {
 // @Produce  json
 // @Param cpf path string true "CPF do atleta"
 // @Success 200 {object} models.Atleta
-// @Failure 404 {object} models.Atleta "Atleta não encontrado"
+// @Failure 404 {object} map[string]string "Atleta não encontrado"
 // @Router /atleta/{cpf} [get]
 func ExibeAtletaPorID(c *gin.Context) {
 	var atleta models.Atleta
@@ -63,9 +63,9 @@ func ExibeAtletaPorID(c *gin.Context) {
 
 	result := database.DB.Preload("Lider").Preload("Equipe").Where("cpf = ?", cpf).First(&atleta)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, models.Atleta{
-			Nome:  "Erro",
-			Email: "Atleta não encontrado",
+		c.JSON(http.StatusNotFound, map[string]string{
+			"Nome":  "Erro",
+			"Email": "Atleta não encontrado",
 		})
 		return
 	}
@@ -82,33 +82,33 @@ func ExibeAtletaPorID(c *gin.Context) {
 // @Param cpf path string true "CPF do atleta"
 // @Param atleta body models.Atleta true "Dados atualizados do atleta"
 // @Success 200 {object} models.Atleta
-// @Failure 400 {object} models.Atleta "Dados inválidos para atualização"
-// @Failure 404 {object} models.Atleta "Atleta não encontrado"
+// @Failure 400 {object} map[string]string "Dados inválidos para atualização"
+// @Failure 404 {object} map[string]string "Atleta não encontrado"
 // @Router /atleta/{cpf} [patch]
 func AtualizaAtleta(c *gin.Context) {
 	var atleta models.Atleta
 	cpf := c.Param("cpf")
 
 	if err := database.DB.Where("cpf = ?", cpf).First(&atleta).Error; err != nil {
-		c.JSON(http.StatusNotFound, models.Atleta{
-			Nome:  "Erro",
-			Email: "Atleta não encontrado",
+		c.JSON(http.StatusNotFound, map[string]string{
+			"Nome":  "Erro",
+			"Email": "Atleta não encontrado",
 		})
 		return
 	}
 
 	if err := c.ShouldBindJSON(&atleta); err != nil {
-		c.JSON(http.StatusBadRequest, models.Atleta{
-			Nome:  "Erro",
-			Email: "Dados inválidos para atualização",
+		c.JSON(http.StatusBadRequest, map[string]string{
+			"Nome":  "Erro",
+			"Email": "Dados inválidos para atualização",
 		})
 		return
 	}
 
 	if err := database.DB.Model(&atleta).Updates(atleta).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, models.Atleta{
-			Nome:  "Erro",
-			Email: "Falha ao atualizar o atleta",
+		c.JSON(http.StatusInternalServerError, map[string]string{
+			"Nome":  "Erro",
+			"Email": "Falha ao atualizar o atleta",
 		})
 		return
 	}
@@ -124,7 +124,7 @@ func AtualizaAtleta(c *gin.Context) {
 // @Produce  json
 // @Param cpf_lider path string true "CPF do líder"
 // @Success 200 {array} models.Atleta
-// @Failure 404 {object} gin.H{"error": "Nenhum atleta encontrado para o líder informado"}
+// @Failure 404 {object} map[string]string "Nenhum atleta encontrado para o líder informado"
 // @Router /atletas/lider/{cpf_lider} [get]
 func ExibeAtletasPorLider(c *gin.Context) {
 	var atletas []models.Atleta
@@ -132,7 +132,7 @@ func ExibeAtletasPorLider(c *gin.Context) {
 
 	result := database.DB.Preload("Lider").Preload("Equipe").Where("cpf_lider = ?", cpfLider).Find(&atletas)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Nenhum atleta encontrado para esse líder"})
+		c.JSON(http.StatusNotFound, map[string]string{"error": "Nenhum atleta encontrado para esse líder"})
 		return
 	}
 
@@ -147,7 +147,7 @@ func ExibeAtletasPorLider(c *gin.Context) {
 // @Produce  json
 // @Param id_equipe path uint true "ID da equipe"
 // @Success 200 {array} models.Atleta
-// @Failure 404 {object} gin.H{"error": "Nenhum atleta encontrado para a equipe informada"}
+// @Failure 404 {object} map[string]string "Nenhum atleta encontrado para a equipe informada"
 // @Router /atletas/equipe/{id_equipe} [get]
 func ExibeAtletasPorEquipe(c *gin.Context) {
 	var atletas []models.Atleta
@@ -155,7 +155,7 @@ func ExibeAtletasPorEquipe(c *gin.Context) {
 
 	result := database.DB.Preload("Lider").Preload("Equipe").Where("id_equipe = ?", idEquipe).Find(&atletas)
 	if result.Error != nil || len(atletas) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Nenhum atleta encontrado para essa equipe"})
+		c.JSON(http.StatusNotFound, map[string]string{"error": "Nenhum atleta encontrado para essa equipe"})
 		return
 	}
 
