@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		token := c.GetHeader("Authorization")
 
-		if token != "8h9pBq2rRs1cT4dWzF5vH0mK" {
+		if token != os.Getenv("AUTH") {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "Token inválido",
 			})
